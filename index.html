@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distances from Agadir to Major Moroccan Cities</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #ffffff;
+            box-sizing: border-box;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .chart-container {
+            position: relative;
+            margin: 20px 0;
+        }
+        .chart-row {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .chart-row:hover {
+            background: #e9ecef;
+        }
+        .city-name {
+            width: 120px;
+            font-weight: bold;
+            color: #34495e;
+            font-size: 14px;
+        }
+        .bar-container {
+            flex: 1;
+            margin: 0 15px;
+            position: relative;
+            height: 30px;
+            background: #ecf0f1;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .distance-bar {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.8s ease-in-out;
+            position: relative;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+        }
+        .driving-bar {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.8s ease-in-out;
+            position: absolute;
+            top: 0;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            opacity: 0.7;
+        }
+        .distance-text {
+            width: 200px;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 30px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 15px;
+            border-radius: 3px;
+        }
+        .direct-color {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+        }
+        .driving-color {
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+        }
+        .stats {
+            background: #ecf0f1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .stats h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏛️ Distances from Agadir to Major Moroccan Cities</h1>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color direct-color"></div>
+                <span>Direct Distance</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color driving-color"></div>
+                <span>Driving Distance</span>
+            </div>
+        </div>
+
+        <div class="chart-container" id="chart">
+            <!-- Chart will be populated by JavaScript -->
+        </div>
+
+        <div class="stats">
+            <h3>📊 Distance Statistics</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="closest-city">-</div>
+                    <div class="stat-label">Closest City</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="farthest-city">-</div>
+                    <div class="stat-label">Farthest City</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="avg-distance">-</div>
+                    <div class="stat-label">Average Distance</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="total-cities">-</div>
+                    <div class="stat-label">Cities Mapped</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const distances = [
+            { city: 'Essaouira', direct: 60.38, driving: 100.25 },
+            { city: 'Marrakech', direct: 109.74, driving: 138.23 },
+            { city: 'Ouarzazate', direct: 154.38, driving: 220.76 },
+            { city: 'Casablanca', direct: 229.04, driving: 273.02 },
+            { city: 'Rabat', direct: 277.59, driving: 325.96 },
+            { city: 'Ifrane', direct: 308.40, driving: 468.11 },
+            { city: 'Meknès', direct: 319.64, driving: 418.59 },
+            { city: 'Laayoune', direct: 330.98, driving: 515.18 },
+            { city: 'Fès', direct: 349.46, driving: 454.53 },
+            { city: 'Chefchaouen', direct: 395.11, driving: 480.52 },
+            { city: 'Tanger', direct: 411.04, driving: 482.40 },
+            { city: 'Tétouan', direct: 413.86, driving: 512.73 },
+            { city: 'Oujda', direct: 519.05, driving: 649.94 },
+            { city: 'Dakhla', direct: 623.79, driving: 846.21 }
+        ];
+
+        // Sort by direct distance
+        distances.sort((a, b) => a.direct - b.direct);
+
+        const maxDistance = Math.max(...distances.map(d => d.driving));
+        const chartContainer = document.getElementById('chart');
+
+        distances.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.className = 'chart-row';
+            
+            const directWidth = (item.direct / maxDistance) * 100;
+            const drivingWidth = (item.driving / maxDistance) * 100;
+            
+            row.innerHTML = `
+                <div class="city-name">${item.city}</div>
+                <div class="bar-container">
+                    <div class="distance-bar" style="width: ${directWidth}%"></div>
+                    <div class="driving-bar" style="width: ${drivingWidth}%"></div>
+                </div>
+                <div class="distance-text">
+                    Direct: ${item.direct} mi<br>
+                    Driving: ${item.driving} mi
+                </div>
+            `;
+            
+            chartContainer.appendChild(row);
+        });
+
+        // Calculate and display statistics
+        const closestCity = distances[0];
+        const farthestCity = distances[distances.length - 1];
+        const avgDistance = (distances.reduce((sum, item) => sum + item.direct, 0) / distances.length).toFixed(1);
+
+        document.getElementById('closest-city').textContent = closestCity.city;
+        document.getElementById('farthest-city').textContent = farthestCity.city;
+        document.getElementById('avg-distance').textContent = avgDistance + ' mi';
+        document.getElementById('total-cities').textContent = distances.length;
+
+        // Animate bars on load
+        setTimeout(() => {
+            document.querySelectorAll('.distance-bar, .driving-bar').forEach(bar => {
+                bar.style.width = bar.style.width;
+            });
+        }, 100);
+    </script>
+</body>
+</html>
